@@ -1,0 +1,46 @@
+{
+    "env": {
+        "commonjs": true,
+        "es2021": true,
+        "node": true
+    },
+    "globals": {
+        "NodeJS": true
+    },
+    "extends": [
+        "airbnb-base",
+        "plugin:security/recommended",
+        "plugin:prettier/recommended",
+        "plugin:import/recommended",
+        "plugin:import/typescript"
+    ],
+    "plugins": ["@typescript-eslint", "security", "prettier", "import"],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaVersion": "latest"
+    },
+    "settings": {
+        "import/parsers": {
+            "@typescript-eslint/parser": [".ts", ".tsx"]
+        },
+        "import/resolver": {
+            "typescript": {
+                "alwaysTryTypes": true,
+                "project": "./"
+            }
+        }
+    },
+    "rules": {
+        "import/extensions": [
+            "error",
+            "always",
+            {
+                "ts": "never"
+            }
+        ],
+        "no-unused-vars": "warn",
+        "import/prefer-default-export": "off",
+        "security/detect-object-injection": "off",
+        "no-underscore-dangle": "off"
+    }
+}
