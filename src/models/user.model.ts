@@ -1,6 +1,6 @@
 import { roles } from "@configs/roles";
 import bcrypt from "bcryptjs";
-import mongoose from "mongoose";
+import mongoose, { Model } from "mongoose";
 import validator from "validator";
 
 export interface UserDocument extends mongoose.Document {
@@ -10,7 +10,12 @@ export interface UserDocument extends mongoose.Document {
     role: string;
 }
 
-const userSchema = new mongoose.Schema<UserDocument>(
+interface UserModal extends Model<UserDocument> {
+    // eslint-disable-next-line no-unused-vars
+    isEmailTaken: (email: string, excludeUserId?: mongoose.Types.ObjectId) => Promise<boolean>;
+}
+
+const userSchema = new mongoose.Schema<UserDocument, UserModal>(
     {
         name: {
             type: String,
@@ -54,7 +59,7 @@ const userSchema = new mongoose.Schema<UserDocument>(
  * @param excludeUserId - The user id to exclude from the search
  * @returns {Promise<Boolean>} - Returns true if the email is taken, false otherwise
  */
-userSchema.statics.isEmailExists = async function checkEmailExists(
+userSchema.statics.isEmailTaken = async function checkEmailExists(
     email: string,
     excludeUserId?: mongoose.Types.ObjectId
 ): Promise<boolean> {
@@ -84,6 +89,6 @@ userSchema.pre<UserDocument>("save", async function hashPassword(next) {
 /**
  * @typedef User
  */
-const User = mongoose.model<UserDocument>("User", userSchema);
+const User = mongoose.model<UserDocument, UserModal>("User", userSchema);
 
 export default User;
