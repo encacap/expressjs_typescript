@@ -8,10 +8,10 @@ export interface UserDocument extends mongoose.Document {
     email: string;
     password: string;
     role: string;
+    comparePassword: (password: String) => Promise<boolean>;
 }
 
 interface UserModal extends Model<UserDocument> {
-    // eslint-disable-next-line no-unused-vars
     isEmailTaken: (email: string, excludeUserId?: mongoose.Types.ObjectId) => Promise<boolean>;
 }
 
@@ -38,6 +38,7 @@ const userSchema = new mongoose.Schema<UserDocument, UserModal>(
             type: String,
             required: true,
             trim: true,
+            select: false,
         },
         role: {
             type: String,
@@ -70,9 +71,9 @@ userSchema.statics.isEmailTaken = async function checkEmailExists(
 /**
  * Check if the password matches the user's password
  * @param password - The password to compare
- * @returns {Promise<String>} - Return true if the password is match, false otherwise
+ * @returns {Promise<boolean>} - Return true if the password is match, false otherwise
  */
-userSchema.methods.isPasswordMatch = async function isPasswordMatch(password: String): Promise<boolean> {
+userSchema.methods.comparePassword = async function comparePassword(password: String): Promise<boolean> {
     const user = this;
     const isMatch = await bcrypt.compare(password, user.password);
     return isMatch;
