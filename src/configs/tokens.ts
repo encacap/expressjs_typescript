@@ -8,4 +8,4 @@ const tokenTypes: TokenTypes = {
     REFRESH: "refresh",
 };
 
-export default tokenTypes;
+export { tokenTypes };
