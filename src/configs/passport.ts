@@ -1,5 +1,5 @@
 import configs from "@configs/index";
-import tokenTypes from "@configs/tokens";
+import { tokenTypes } from "@configs/tokens";
 import User from "@models/user.model";
 import { ExtractJwt, Strategy as JwtStrategy } from "passport-jwt";
 
