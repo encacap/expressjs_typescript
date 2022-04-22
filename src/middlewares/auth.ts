@@ -8,7 +8,7 @@ import passport from "passport";
 const verifyCallback =
     (req: Request, resolve: Function, reject: Function, requiredRights: string[]) =>
     async (error: Error, user: UserDocument, info: any) => {
-        if (!error || info || !user) {
+        if (error || info || !user) {
             return reject(new ApiError(httpStatus.UNAUTHORIZED, "Unauthorized"));
         }
 

@@ -7,7 +7,7 @@ interface UserRoles {
 
 const allRoles: UserRoles = {
     user: [],
-    admin: ["createUser"],
+    admin: ["createUser", "createCity"],
 };
 
 const roles = _.keys(allRoles);
