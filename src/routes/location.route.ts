@@ -11,6 +11,10 @@ router
     .get(validate(locationValidation.getCityList), locationController.getCityList)
     .post(auth("createCity"), validate(locationValidation.createCity), locationController.createCity);
 
-router.route("/cities/:city_id").get(validate(locationValidation.getCity), locationController.getCityById);
+router
+    .route("/cities/:city_id")
+    .get(validate(locationValidation.getCity), locationController.getCity)
+    .patch(auth("updateCity"), validate(locationValidation.updateCity), locationController.updateCity)
+    .delete(auth("deleteCity"), validate(locationValidation.deleteCity), locationController.deleteCity);
 
 export default router;

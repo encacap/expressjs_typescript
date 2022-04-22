@@ -16,8 +16,10 @@ const citySchema = new mongoose.Schema<CityDocument>({
 citySchema.index({ name: "text" });
 
 citySchema.pre("save", function createSlug(next) {
-    if (!this.slug) {
-        this.slug = slugify(this.name);
+    if (this.isNew) {
+        if (!this.slug) {
+            this.slug = slugify(this.name);
+        }
     }
     next();
 });

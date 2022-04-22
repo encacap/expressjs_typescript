@@ -45,6 +45,28 @@ const getCityById = async (id: string): Promise<CityDocument> => {
 };
 
 /**
+ * Update a city by id
+ * @param {string} id - City's id
+ * @param {CityDocument} cityBody
+ * @returns {Promise<CityDocument>}
+ */
+const updateCityById = async (id: string, cityBody: CityDocument): Promise<CityDocument> => {
+    const city = await getCityById(id);
+    Object.assign(city, cityBody);
+    return city.save();
+};
+
+/**
+ * Delete a city by id
+ * @param {string} id - City's id
+ * @returns {Promise<CityDocument>}
+ */
+const deleteCityById = async (id: string): Promise<CityDocument> => {
+    const city = await getCityById(id);
+    return city.remove();
+};
+
+/**
  * Create a new district
  * @param {DistrictDocument} districtBody
  * @returns {Promise<DistrictDocument>}
@@ -124,8 +146,10 @@ const getWardById = async (id: string): Promise<WardDocument> => {
 
 export default {
     createCity,
-    getCityById,
     getCityList,
+    getCityById,
+    updateCityById,
+    deleteCityById,
     createDistrict,
     getDistrictList,
     getDistrictById,
