@@ -21,6 +21,8 @@ const wardSchema = new mongoose.Schema<WardDocument, WardModel>({
     },
 });
 
+wardSchema.index({ name: "text" });
+
 /**
  * Check if ward existed
  * @param {string} slug - Slug of ward

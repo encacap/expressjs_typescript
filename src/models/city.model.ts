@@ -1,3 +1,4 @@
+import { slugify } from "@utils/helpers";
 import mongoose from "mongoose";
 
 export interface CityDocument extends mongoose.Document {
@@ -8,8 +9,17 @@ export interface CityDocument extends mongoose.Document {
 
 const citySchema = new mongoose.Schema<CityDocument>({
     ghn_ref: String,
-    name: String,
+    name: mongoose.SchemaTypes.String,
     slug: String,
+});
+
+citySchema.index({ name: "text" });
+
+citySchema.pre("save", function createSlug(next) {
+    if (!this.slug) {
+        this.slug = slugify(this.name);
+    }
+    next();
 });
 
 /**

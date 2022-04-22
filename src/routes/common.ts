@@ -1,6 +1,7 @@
 import authRouter from "@routes/auth.route";
 import estateRouter from "@routes/estate.route";
 import fileRouter from "@routes/file.route";
+import locationRouter from "@routes/location.route";
 import userRouter from "@routes/user.route";
 import express from "express";
 
@@ -22,6 +23,10 @@ const defaultRoutes = [
     {
         path: "/files",
         router: fileRouter,
+    },
+    {
+        path: "/locations",
+        router: locationRouter,
     },
 ];
 

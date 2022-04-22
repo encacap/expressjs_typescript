@@ -21,6 +21,8 @@ const districtSchema = new mongoose.Schema<DistrictDocument, DistrictModel>({
     },
 });
 
+districtSchema.index({ name: "text" });
+
 /**
  * Check if district existed
  * @param slug - Slug of district
