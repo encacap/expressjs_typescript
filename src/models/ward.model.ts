@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
 export interface WardDocument extends mongoose.Document {
+    ghn_ref: string;
     name: string;
     slug: string;
     district: mongoose.Schema.Types.ObjectId;
@@ -11,6 +12,7 @@ interface WardModel extends mongoose.Model<WardDocument> {
 }
 
 const wardSchema = new mongoose.Schema<WardDocument, WardModel>({
+    ghn_ref: String,
     name: String,
     slug: String,
     district: {

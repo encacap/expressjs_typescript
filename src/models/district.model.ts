@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
 export interface DistrictDocument extends mongoose.Document {
+    ghn_ref: string;
     name: string;
     slug: string;
     city: mongoose.Schema.Types.ObjectId;
@@ -11,6 +12,7 @@ interface DistrictModel extends mongoose.Model<DistrictDocument> {
 }
 
 const districtSchema = new mongoose.Schema<DistrictDocument, DistrictModel>({
+    ghn_ref: String,
     name: String,
     slug: String,
     city: {
