@@ -1,6 +1,7 @@
 import * as morgan from "@configs/morgan";
 import jwtStrategy from "@configs/passport";
 import { errorConverter, errorHandler } from "@middlewares/error";
+import overrideJsonMethod from "@middlewares/standardizeData";
 import commonRoutes from "@routes/common";
 import ApiError from "@utils/apiError";
 import compression from "compression";
@@ -27,6 +28,8 @@ const createServer = (): express.Application => {
 
     app.use(passport.initialize());
     passport.use("jwt", jwtStrategy);
+
+    app.use(overrideJsonMethod);
 
     // Routes
     app.use("/", commonRoutes);
