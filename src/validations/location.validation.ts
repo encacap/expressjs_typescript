@@ -18,7 +18,7 @@ const getCityList = {
         .unknown(true),
 };
 
-const getCityById = {
+const getCity = {
     params: object().shape({
         city_id: string().test(isValidObjectId).required(),
     }),
@@ -27,5 +27,5 @@ const getCityById = {
 export default {
     createCity,
     getCityList,
-    getCityById,
+    getCity,
 };

@@ -11,6 +11,6 @@ router
     .get(validate(locationValidation.getCityList), locationController.getCityList)
     .post(auth("createCity"), validate(locationValidation.createCity), locationController.createCity);
 
-router.route("/cities/:city_id").get(validate(locationValidation.getCityById), locationController.getCityById);
+router.route("/cities/:city_id").get(validate(locationValidation.getCity), locationController.getCityById);
 
 export default router;
