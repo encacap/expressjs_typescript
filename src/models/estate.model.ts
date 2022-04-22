@@ -2,17 +2,6 @@ import mongoose, { PaginateModel } from "mongoose";
 import paginate from "mongoose-paginate-v2";
 import Counter from "./counter.model";
 
-interface ImageDocument extends mongoose.Document {
-    origin: string;
-    resource_type: "image" | "video";
-    cloud_name: string;
-    action: string;
-    version: number;
-    name: string;
-    public_id: string;
-    extension: string;
-}
-
 export interface EstateDocument extends mongoose.Document {
     custom_id: string;
     priority: number;
@@ -21,57 +10,24 @@ export interface EstateDocument extends mongoose.Document {
     description: string;
     price: string;
     square: string;
-    category: {
-        name: string;
-        slug: string;
-    };
+    category: mongoose.Schema.Types.ObjectId;
     properties: [
         {
             name: string;
-            slug: string;
+            value: string;
         }
     ];
     location: {
         street: string;
-        ward: {
-            ward_id: mongoose.Types.ObjectId;
-            name: string;
-            slug: string;
-        };
-        district: {
-            district_id: mongoose.Types.ObjectId;
-            name: string;
-            slug: string;
-        };
-        city: {
-            city_id: mongoose.Types.ObjectId;
-            name: string;
-            slug: string;
-        };
+        ward: mongoose.Schema.Types.ObjectId;
+        district: mongoose.Schema.Types.ObjectId;
+        city: mongoose.Schema.Types.ObjectId;
     };
-    contact: {
-        contact_id: mongoose.Types.ObjectId;
-        name: string;
-        phone: string;
-    };
-    avatar: ImageDocument;
-    images: [ImageDocument];
+    contact: mongoose.Schema.Types.ObjectId;
+    avatar: mongoose.Schema.Types.ObjectId;
+    images: [mongoose.Schema.Types.ObjectId];
     videos: [string];
 }
-
-const imageSchema = new mongoose.Schema<ImageDocument>({
-    origin: String,
-    resource_type: {
-        type: String,
-        enum: ["image", "video"],
-    },
-    cloud_name: String,
-    action: String,
-    version: Number,
-    name: String,
-    public_id: String,
-    extension: String,
-});
 
 const estateSchema = new mongoose.Schema<EstateDocument, PaginateModel<EstateDocument>>(
     {
@@ -90,8 +46,8 @@ const estateSchema = new mongoose.Schema<EstateDocument, PaginateModel<EstateDoc
         price: String,
         square: Number,
         category: {
-            name: String,
-            slug: String,
+            type: mongoose.Types.ObjectId,
+            ref: "Category",
         },
         properties: [
             {
@@ -102,28 +58,32 @@ const estateSchema = new mongoose.Schema<EstateDocument, PaginateModel<EstateDoc
         location: {
             street: String,
             ward: {
-                ward_id: mongoose.Types.ObjectId,
-                name: String,
-                slug: String,
+                type: mongoose.Types.ObjectId,
+                ref: "Ward",
             },
             district: {
-                district_id: mongoose.Types.ObjectId,
-                name: String,
-                slug: String,
+                type: mongoose.Types.ObjectId,
+                ref: "District",
             },
             city: {
-                city_id: mongoose.Types.ObjectId,
-                name: String,
-                slug: String,
+                type: mongoose.Types.ObjectId,
+                ref: "City",
             },
         },
         contact: {
-            contact_id: mongoose.Types.ObjectId,
-            name: String,
-            phone: String,
+            type: mongoose.Types.ObjectId,
+            ref: "Contact",
         },
-        avatar: imageSchema,
-        images: [imageSchema],
+        avatar: {
+            type: mongoose.Types.ObjectId,
+            ref: "Image",
+        },
+        images: [
+            {
+                type: mongoose.Types.ObjectId,
+                ref: "Image",
+            },
+        ],
         videos: [String],
     },
     {
@@ -156,7 +116,11 @@ estateSchema.pre("save", async function bindCustomId(next) {
     const estate = this as EstateDocument;
 
     if (estate.isNew) {
-        const counter = await Counter.findOne({ name: "estate" });
+        let counter = await Counter.findOne({ name: "estate" });
+        if (!counter) {
+            counter = new Counter({ name: "estate", value: 0 });
+            await counter.save();
+        }
         const value = counter.value + 1;
         if (!estate.custom_id) {
             estate.custom_id = String(value);
