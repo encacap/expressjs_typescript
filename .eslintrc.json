@@ -38,6 +38,7 @@
                 "ts": "never"
             }
         ],
+        "func-names": "off",
         "import/prefer-default-export": "off",
         "security/detect-object-injection": "off",
         "no-underscore-dangle": "off",
